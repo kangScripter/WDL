@@ -1,0 +1,17 @@
+[
+  {
+    "mpd_url": "https://pop-iad-2.cf.dash.row.aiv-cdn.net/dm/2$yma2MiqNsQ3VglbZgkeGI9d6ghM~/1@f60c158014b22f0009dc238b962c3241/26fb/6976/11e3/430c-832e-d0ed3726ca49/ce14e19c-9fae-498b-b309-1bc804b94666_corrected.mpd?amznDtid=AOAGZA014O5RE&encoding=segmentBase"
+  },
+  {
+    "kid": "b770d5b4bb6b594daf985845aae9aa5f",
+    "hex_key": "b0cb46d2d31cf044bc73db71e9865f6f"
+  },
+  {
+    "kid": "a67a8724808e4992b2a27c992f7cc940",
+    "hex_key": "68daf2f001592baf03bdae734ef4d4e3"
+  },
+  {
+    "kid": "29d8fb6edc5b4ba2bea5cd02eeb94425",
+    "hex_key": "b1e8a24f2c94a4fd1c4a81f2d40ce872"
+  }
+]
