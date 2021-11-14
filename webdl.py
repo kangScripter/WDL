@@ -59,7 +59,7 @@ if args.id:
 
     vid_id = input("\nEnter Video ID : ")
     audio_id = input("Enter Audio ID : ")
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', json_mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', json_mpd_url, '--audio-multistreams', '-o', 'encrypted.%(language)s.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
     subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', vid_id, '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])   
 
 else:
@@ -69,19 +69,22 @@ else:
 
 
 print("\nDecrypting .....")
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.m4a decrypted.m4a', shell=True)
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.mp4 decrypted.mp4', shell=True)  
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
+
 
 if args.subtitle:
     subprocess.run(f'{aria2cexe} {subtitle}', shell=True)
     os.system('ren *.xml en.xml')
     subprocess.run(f'{SubtitleEditexe} /convert en.xml srt', shell=True) 
     print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0', 'en.srt'])
+    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:tel', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:eng', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0', 'en.srt'])
     print("\nAll Done .....")
 else:
     print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0'])
+    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:tel', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0'])
     print("\nAll Done .....")    
 
 if args.delenc:
