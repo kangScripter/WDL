@@ -7,7 +7,7 @@ import pyfiglet
 from rich import print
 from typing import DefaultDict
 
-title = pyfiglet.figlet_format('WEBDL Script', font='slant')
+title = pyfiglet.figlet_format('Hotstar WEBDL Script', font='slant')
 print(f'[magenta]{title}[/magenta]')
 print("by parnex")
 print("Required files : yt-dlp.exe, mkvmerge.exe, mp4decrypt.exe, aria2c.exe\n")
