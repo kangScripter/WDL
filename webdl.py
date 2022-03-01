@@ -17,27 +17,12 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument("-o", '--output', dest="output", help="Specify output file name with no extension", required=True)
 arguments.add_argument("-id", dest="id", action='store_true', help="use if you want to manually enter video and audio id.")
 arguments.add_argument("-s", dest="subtitle", help="enter subtitle url")
-arguments.add_argument("-k", dest="keyfile", action='store_true', help="Use keyfile with the same name as specified output")
+arguments.add_argument("-k", dest="key", help="Enter Keys")
 arguments.add_argument("-d", dest="delenc", action='store_true', help="Delete encoded AND JSON FILE upon completion")
 args = arguments.parse_args()
 
-if args.keyfile:
-    keyfile = str(args.output) + ".json"
-else:
-    keyfile = "keys.json"
-
-with open(keyfile) as json_data:
-    config = json.load(json_data)
-    json_mpd_url = config[0]['mpd_url']
-    try:
-        keys = ""
-        for i in range(1, len(config)):
-            keys += f"--key {config[i]['kid']}:{config[i]['hex_key']} "
-    except:
-        keys = ""
-        for i in range(1, len(config)-1):
-            keys += f"--key {config[i]['kid']}:{config[i]['hex_key']} "
-
+mpd_url = args.mpd
+keys = args.key
 currentFile = __file__
 realPath = os.path.realpath(currentFile)
 dirPath = os.path.dirname(realPath)
@@ -54,25 +39,23 @@ output = str(args.output)
 subtitle = str(args.subtitle)
 
 if args.id:
-    print(f'Selected MPD : {json_mpd_url}\n')    
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-F', json_mpd_url])
+    print(f'Selected MPD : {mpd_url}\n')    
+    subprocess.run([youtubedlexe, '-k','--referer','https://www.hotstar.com/in','--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36', '--allow-unplayable-formats', '--no-check-certificate','--cookies-from-browser' ,'chrome','-F', mpd_url])
 
     vid_id = input("\nEnter Video ID : ")
     audio_id = input("Enter Audio ID : ")
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', json_mpd_url, '--audio-multistreams', '-o', 'encrypted.%(language)s.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', vid_id, '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])   
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats','--referer','https://www.hotstar.com/in', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', mpd_url, '--audio-multistreams', '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats','--referer','https://www.hotstar.com/in','--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36','--no-check-certificate', '-f', vid_id, '--fixup', 'never', mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])   
 
 else:
-    print(f'Selected MPD : {json_mpd_url}\n')
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'ba', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'bv', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])    
+    print(f'Selected MPD : {mpd_url}\n')
+    subprocess.run([youtubedlexe, '-k','--referer','https://www.hotstar.com/in','--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36, '--allow-unplayable-formats', '--no-check-certificate', '-f', 'ba', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
+    subprocess.run([youtubedlexe, '-k','--referer','https://www.hotstar.com/in','--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36, '--allow-unplayable-formats', '--no-check-certificate', '-f', 'bv', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])    
 
 
 print("\nDecrypting .....")
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.%(language)s.m4a decrypted.%(language)s.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted..m4a decrypted.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.mp4 decrypted..mp4', shell=True)
 
 
 if args.subtitle:
@@ -80,11 +63,11 @@ if args.subtitle:
     os.system('ren *.xml en.xml')
     subprocess.run(f'{SubtitleEditexe} /convert en.xml srt', shell=True) 
     print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:tel', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:eng', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0', 'en.srt'])
+    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:id', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language' 'en.srt'])
     print("\nAll Done .....")
 else:
     print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:tel', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0'])
+    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:und', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:id', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0'])
     print("\nAll Done .....")    
 
 if args.delenc:
