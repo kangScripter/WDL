@@ -54,7 +54,7 @@ else:
 
 
 print("\nDecrypting .....")
-subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted..m4a decrypted.m4a', shell=True)
+subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.m4a decrypted.m4a', shell=True)
 subprocess.run(f'{mp4decryptexe} --show-progress {keys} encrypted.mp4 decrypted..mp4', shell=True)
 
 
@@ -63,13 +63,8 @@ if args.subtitle:
     os.system('ren *.xml en.xml')
     subprocess.run(f'{SubtitleEditexe} /convert en.xml srt', shell=True) 
     print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:id', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language' 'en.srt'])
+    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:eng', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0', 'en.srt'])
     print("\nAll Done .....")
-else:
-    print("Merging .....")
-    subprocess.run([mkvmergeexe, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:eng', '--default-track', '0:yes', '--compression', '0:none', 'decrypted.mp4', '--language', '0:und', '--default-track', '0:yes', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:id', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted1.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted2.m4a','--language', '0:tam', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted3.m4a','--language', '0:hin', '--default-track', '0:no', '--compression' ,'0:none', 'decrypted.m4a','--language', '0:eng','--track-order', '0:0,1:0,2:0,3:0,4:0'])
-    print("\nAll Done .....")    
-
 if args.delenc:
     delete_choice = 1
     if os.path.isfile(output + ".mkv"):
