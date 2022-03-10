@@ -32,9 +32,9 @@ KEY = str(args.key)
 
 
 print("\n Downloading..")
-subprocess.run([ytdlp, '-k', '--allow-unplayable-formats', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36', '--no-check-certificate', '-F', mpd])
-video_id = input("Input Video ID : ")
-audio_id = input("Input Audio ID : ")
+#subprocess.run([ytdlp, '-k', '--allow-unplayable-formats', '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36', '--no-check-certificate', '-F', mpd])
+#video_id = input("Input Video ID : ")
+#audio_id = input("Input Audio ID : ")
 subprocess.run([ytdlp, '-k', '--allow-unplayable-formats','--no-check-certificate', '-f', bv, '--fixup', 'never', mpd, '-o', 'Encrypted.Audio.m4a', '--external-downloader', aria2c, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
 subprocess.run([ytdlp, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', ba, '--fixup', 'never', mpd, '-o', 'Encrypted.Video.mp4', '--external-downloader', aria2c, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
   
