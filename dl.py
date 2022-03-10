@@ -19,7 +19,7 @@ realPath = os.path.realpath(currentFile)
 dirPath = os.path.dirname(realPath)
 dirName = os.path.basename(dirPath)
 
-ytdlp = dirPath + '/binaries/yt-dlp'
+ytdlp = dirPath + '/binaries/ytdlp'
 aria2c = dirPath + '/binaries/aria2c.exe'
 mp4decrypt = dirPath + '/binaries/mp4decrypt.exe'
 mkvmerge = dirPath + '/binaries/mkvmerge.exe'
