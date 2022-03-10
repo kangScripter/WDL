@@ -38,7 +38,7 @@ print("\n Downloading..")
 subprocess.run([ytdlp, '-k', '--allow-unplayable-formats','--no-check-certificate', '-f', 'bv', '--fixup', 'never', mpd, '-o', '/usr/src/app/downloads/Encrypted.Audio.m4a', '--external-downloader', aria2c, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
 subprocess.run([ytdlp, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'ba', '--fixup', 'never', mpd, '-o', '/usr/src/app/downloads/Encrypted.Video.mp4', '--external-downloader', aria2c, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
 
-INPUT_VIDEO = "  
+
 print("\n\n")  
 print("\n\nDecrypt Video & Audio...")
 print("\nDone..")
