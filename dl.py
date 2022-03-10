@@ -9,8 +9,8 @@ print("V 0.0.1")
 
 arguments = argparse.ArgumentParser()
 arguments.add_argument("-l", "--mpd", dest="mpd", help="mpd link")
-#arguments.add_argument("-k","--key", dest="key",  help="key")
-#arguments.add_argument("-o", "--output", dest="output", help="File Name")
+arguments.add_argument("-k","--key", dest="key",  help="key")
+arguments.add_argument("-o", "--output", dest="output", help="File Name")
 
 args = arguments.parse_args()
 
@@ -24,10 +24,10 @@ aria2c = dirPath + '/bin/aria2c.exe'
 mp4decrypt = dirPath + '/bin/mp4decrypt.exe'
 mkvmerge = dirPath + '/bin/mkvmerge.exe'
 
-output = input("Enter Output Name: ")
+output = str(args.output)
 
-mpd = args.mpd
-KEY = input("Enter Key: ")
+mpd = str(args.mpd)
+KEY = str(args.key)
 
 
 
