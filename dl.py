@@ -21,7 +21,7 @@ dirName = os.path.basename(dirPath)
 
 ytdlp = dirPath + '/binaries/ytdlp'
 aria2c = dirPath + '/binaries/aria2c.exe'
-mp4decrypt = dirPath + '/binaries/mp4decrypt.exe'
+mp4decrypt = dirPath + '/binaries/mp4decrypt_mod_linux'
 mkvmerge = dirPath + '/binaries/mkvmerge.exe'
 
 output = str(args.output)
