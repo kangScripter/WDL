@@ -17,26 +17,9 @@ arguments = argparse.ArgumentParser()
 arguments.add_argument("-o", '--output', dest="output", help="Specify output file name with no extension", required=True)
 arguments.add_argument("-id", dest="id", action='store_true', help="use if you want to manually enter video and audio id.")
 arguments.add_argument("-s", dest="subtitle", help="enter subtitle url")
-arguments.add_argument("-k", dest="keyfile", action='store_true', help="Use keyfile with the same name as specified output")
+arguments.add_argument("-k", dest="key", action='store_true', help="Use keyfile with the same name as specified output")
 arguments.add_argument("-d", dest="delenc", action='store_true', help="Delete encoded AND JSON FILE upon completion")
 args = arguments.parse_args()
-
-if args.keyfile:
-    keyfile = str(args.output) + ".json"
-else:
-    keyfile = "keys.json"
-
-with open(keyfile) as json_data:
-    config = json.load(json_data)
-    json_mpd_url = config[0]['mpd_url']
-    try:
-        keys = ""
-        for i in range(1, len(config)):
-            keys += f"--key {config[i]['kid']}:{config[i]['hex_key']} "
-    except:
-        keys = ""
-        for i in range(1, len(config)-1):
-            keys += f"--key {config[i]['kid']}:{config[i]['hex_key']} "
 
 currentFile = __file__
 realPath = os.path.realpath(currentFile)
@@ -49,23 +32,24 @@ mp4decryptexe = dirPath + '/binaries/mp4decrypt_new.exe'
 mkvmergeexe = dirPath + '/binaries/mkvmerge.exe'
 SubtitleEditexe = dirPath + '/binaries/SubtitleEdit.exe'
 
-# mpdurl = str(args.mpd)
+mpdurl = str(args.mpd)
 output = str(args.output)
 subtitle = str(args.subtitle)
+keys = args.key
 
 if args.id:
-    print(f'Selected MPD : {json_mpd_url}\n')    
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-F', json_mpd_url])
+    print(f'Selected MPD : {mpdurl}\n')    
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-F', mpdurl])
 
     vid_id = input("\nEnter Video ID : ")
     audio_id = input("Enter Audio ID : ")
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', json_mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', vid_id, '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])   
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', audio_id, '--fixup', 'never', mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', vid_id, '--fixup', 'never', mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])   
 
 else:
-    print(f'Selected MPD : {json_mpd_url}\n')
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'ba', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
-    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'bv', '--fixup', 'never', json_mpd_url, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])    
+    print(f'Selected MPD : {mpdurl}\n')
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'ba', '--fixup', 'never', mpdurl, '-o', 'encrypted.m4a', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])
+    subprocess.run([youtubedlexe, '-k', '--allow-unplayable-formats', '--no-check-certificate', '-f', 'bv', '--fixup', 'never', mpdurl, '-o', 'encrypted.mp4', '--external-downloader', aria2cexe, '--external-downloader-args', '-x 16 -s 16 -k 1M'])    
 
 
 print("\nDecrypting .....")
