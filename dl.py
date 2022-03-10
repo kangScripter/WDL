@@ -19,10 +19,10 @@ realPath = os.path.realpath(currentFile)
 dirPath = os.path.dirname(realPath)
 dirName = os.path.basename(dirPath)
 
-ytdlp = dirPath + '/bin/yt-dlp.exe'
-aria2c = dirPath + '/bin/aria2c.exe'
-mp4decrypt = dirPath + '/bin/mp4decrypt.exe'
-mkvmerge = dirPath + '/bin/mkvmerge.exe'
+ytdlp = dirPath + '/binaries/yt-dlp.exe'
+aria2c = dirPath + '/binaries/aria2c.exe'
+mp4decrypt = dirPath + '/binaries/mp4decrypt.exe'
+mkvmerge = dirPath + '/binaries/mkvmerge.exe'
 
 output = str(args.output)
 
