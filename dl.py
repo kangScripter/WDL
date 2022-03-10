@@ -48,7 +48,7 @@ subprocess.run(f'{mp4decrypt} --key {KEY} --show-progress Encrypted.Video.mp4 De
 print()
 print("\n Merging..")
 
-subprocess.run([mkvmerge, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:und', '--default-track', '0:yes', '--compression', '0:none', '/usr/src/app/downloads/Decrypted.Video.mp4', '--language', '0:und', '--default-track', '0:yes', '--compression' ,'0:none', '/usr/src/app/downloads/Decrypted.Audio.m4a','--language', '0:id'])
+subprocess.run([mkvmerge, '--ui-language' ,'en', '--output', output +'.mkv', '--language', '0:und', '--default-track', '0:yes', '--compression', '0:none', 'Decrypted.Video.mp4', '--language', '0:und', '--default-track', '0:yes', '--compression' ,'0:none', 'Decrypted.Audio.m4a','--language', '0:id'])
 
 print("\n Cleaning...")
 os.remove("Decrypted.Video.mp4")
